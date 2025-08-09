@@ -43,7 +43,7 @@ const BackToTop = () => {
       <button
         onClick={scrollToTop}
         onKeyDown={handleKeyDown}
-        className="bg-primary hover:bg-primary/90 text-primary-foreground p-3 rounded-full shadow-2xl transition-all duration-300 transform hover:scale-110 flex items-center justify-center group focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary"
+        className="bg-primary hover:bg-primary/90 text-white p-3 rounded-md shadow-2xl transition-all duration-300 transform hover:scale-110 flex items-center justify-center group focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary"
         aria-label="Voltar ao topo da página"
         aria-describedby="back-to-top-description"
       >

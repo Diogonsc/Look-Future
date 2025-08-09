@@ -1,5 +1,5 @@
 
-import { Button } from "./ui/button"
+import { Link, useLocation } from "react-router-dom"
 import { MobileMenu } from "./MobileMenu"
 import { cn } from "../lib/utils"
 
@@ -8,25 +8,61 @@ interface HeaderProps {
 }
 
 export function Header({ className }: HeaderProps) {
+  const location = useLocation()
+  const isHomePage = location.pathname === '/'
+
   const navigationItems = [
-    { href: "#inicio", label: "Início" },
-    { href: "#servicos", label: "Serviços" },
-    { href: "#metodologia", label: "Metodologia" },
-    { href: "#precos", label: "Preços" },
-    { href: "#contato", label: "Contato" },
+    { href: "/", label: "Início" },
+    { href: "/projetos", label: "Projetos" },
+    { href: isHomePage ? "#servicos" : "/#servicos", label: "Serviços" },
+    { href: isHomePage ? "#metodologia" : "/#metodologia", label: "Metodologia" },
+    { href: isHomePage ? "#precos" : "/#precos", label: "Preços" },
+    { href: isHomePage ? "#contato" : "/#contato", label: "Contato" },
   ]
 
   const scrollToSection = (href: string) => {
-    const element = document.querySelector(href)
-    if (element) {
-      const headerHeight = 64 // altura do header em pixels
-      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
-      const offsetPosition = elementPosition - headerHeight
+    if (href.startsWith('/#')) {
+      // Navegar para home e depois scroll
+      const sectionId = href.substring(1)
+      setTimeout(() => {
+        const element = document.querySelector(sectionId)
+        if (element) {
+          const headerHeight = 64
+          const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
+          const offsetPosition = elementPosition - headerHeight
 
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      })
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          })
+        }
+      }, 100)
+    } else if (href.startsWith('#')) {
+      // Scroll na página atual
+      const element = document.querySelector(href)
+      if (element) {
+        const headerHeight = 64
+        const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
+        const offsetPosition = elementPosition - headerHeight
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        })
+      }
+    }
+  }
+
+  const handleNavigation = (href: string) => {
+    if (href === '/') {
+      // Navegar para home
+      return
+    } else if (href === '/projetos') {
+      // Navegar para projetos
+      return
+    } else {
+      // Scroll para seção
+      scrollToSection(href)
     }
   }
 
@@ -36,31 +72,42 @@ export function Header({ className }: HeaderProps) {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <div className="flex items-center">
-            <button 
-              onClick={() => scrollToSection('#inicio')}
+            <Link 
+              to="/"
               className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
             >
               <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
                 <span className="text-primary-foreground font-bold text-sm">LF</span>
               </div>
               <span className="font-bold text-xl">Look Future</span>
-            </button>
+            </Link>
           </div>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            {navigationItems.map((item) => (
-              <button
-                key={item.href}
-                onClick={() => scrollToSection(item.href)}
-                className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hover:text-primary"
-              >
-                {item.label}
-              </button>
-            ))}
-            <Button size="sm">
-              Entrar
-            </Button>
+            {navigationItems.map((item) => {
+              if (item.href === '/' || item.href === '/projetos') {
+                return (
+                  <Link
+                    key={item.href}
+                    to={item.href}
+                    className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hover:text-primary"
+                  >
+                    {item.label}
+                  </Link>
+                )
+              } else {
+                return (
+                  <button
+                    key={item.href}
+                    onClick={() => handleNavigation(item.href)}
+                    className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hover:text-primary"
+                  >
+                    {item.label}
+                  </button>
+                )
+              }
+            })}
           </nav>
 
           {/* Mobile Menu */}

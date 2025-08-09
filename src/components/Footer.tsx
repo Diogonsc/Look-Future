@@ -1,4 +1,6 @@
 import { FaFacebook, FaInstagram, FaLinkedin, FaWhatsapp, FaYoutube } from "react-icons/fa6";
+import { Button } from "./ui/button"
+import { Input } from "./ui/input"
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
@@ -149,14 +151,14 @@ export function Footer() {
               Receba insights sobre marketing digital e tecnologia
             </p>
             <div className="flex space-x-2">
-              <input
+              <Input
                 type="email"
                 placeholder="Seu email"
-                className="flex-1 px-4 py-2 bg-card/50 border border-border/50 rounded-lg text-sm focus:outline-none focus:border-primary/50 transition-colors duration-300"
+                className="flex-1"
               />
-              <button className="px-6 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors duration-300">
+              <Button className="px-6 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors duration-300">
                 Inscrever
-              </button>
+              </Button>
             </div>
           </div>
         </div>

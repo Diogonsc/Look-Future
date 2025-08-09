@@ -22,7 +22,7 @@ export function GoogleMap({ address = "Rua das Inovações, 123 - Centro, São P
             </p>
           </div>
           <Button 
-            className="bg-primary text-primary-foreground hover:bg-primary/90"
+            className="bg-primary text-white hover:bg-primary/90"
             onClick={() => {
               const encodedAddress = encodeURIComponent(address)
               window.open(`https://www.google.com/maps/search/?api=1&query=${encodedAddress}`, '_blank')

@@ -1,6 +1,10 @@
 import React, { useState } from 'react'
 import { FaFacebook, FaInstagram, FaLinkedin, FaWhatsapp, FaYoutube, FaMapMarkerAlt, FaPhone, FaEnvelope, FaClock } from "react-icons/fa"
 import { Button } from "./ui/button"
+import { Input } from "./ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select"
+import { Label } from "./ui/label"
+import { Textarea } from "./ui/textarea"
 import { GoogleMap } from "./GoogleMap"
 
 interface ContactForm {
@@ -117,86 +121,79 @@ export function ContactSection() {
               </h3>
               
               <form onSubmit={handleSubmit} className="space-y-6">
-                <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">
+                <div className="space-y-2">
+                  <Label htmlFor="name">
                     Nome Completo *
-                  </label>
-                  <input
+                  </Label>
+                  <Input
                     type="text"
                     id="name"
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 bg-background/50 border border-border/50 rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all duration-300"
                     placeholder="Seu nome completo"
                   />
                 </div>
                 
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
+                <div className="space-y-2">
+                  <Label htmlFor="email">
                     Email *
-                  </label>
-                  <input
+                  </Label>
+                  <Input
                     type="email"
                     id="email"
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 bg-background/50 border border-border/50 rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all duration-300"
                     placeholder="seu@email.com"
                   />
                 </div>
 
-                <div>
-                  <label htmlFor="phone" className="block text-sm font-medium text-foreground mb-2">
+                <div className="space-y-2">
+                  <Label htmlFor="phone">
                     Telefone
-                  </label>
-                  <input
+                  </Label>
+                  <Input
                     type="tel"
                     id="phone"
                     name="phone"
                     value={formData.phone}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 bg-background/50 border border-border/50 rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all duration-300"
                     placeholder="(11) 99999-9999"
                   />
                 </div>
                 
-                <div>
-                  <label htmlFor="subject" className="block text-sm font-medium text-foreground mb-2">
+                <div className="space-y-2">
+                  <Label htmlFor="subject">
                     Assunto *
-                  </label>
-                  <select
-                    id="subject"
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-4 py-3 bg-background/50 border border-border/50 rounded-lg text-foreground focus:outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all duration-300"
-                  >
-                    <option value="">Selecione um assunto</option>
-                    <option value="orcamento">Orçamento</option>
-                    <option value="parceria">Parceria</option>
-                    <option value="duvida">Dúvida</option>
-                    <option value="sugestao">Sugestão</option>
-                    <option value="outro">Outro</option>
-                  </select>
+                  </Label>
+                  <Select value={formData.subject} onValueChange={(value) => setFormData(prev => ({ ...prev, subject: value }))}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione um assunto" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="orcamento">Orçamento</SelectItem>
+                      <SelectItem value="parceria">Parceria</SelectItem>
+                      <SelectItem value="duvida">Dúvida</SelectItem>
+                      <SelectItem value="sugestao">Sugestão</SelectItem>
+                      <SelectItem value="outro">Outro</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
 
-                <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-foreground mb-2">
+                <div className="space-y-2">
+                  <Label htmlFor="message">
                     Mensagem *
-                  </label>
-                  <textarea
+                  </Label>
+                  <Textarea
                     id="message"
                     name="message"
                     value={formData.message}
                     onChange={handleInputChange}
                     required
                     rows={6}
-                    className="w-full px-4 py-3 bg-background/50 border border-border/50 rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all duration-300 resize-none"
                     placeholder="Conte-nos sobre seu projeto..."
                   />
                 </div>
@@ -204,7 +201,7 @@ export function ContactSection() {
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full py-6 bg-primary text-white font-semibold rounded-lg hover:bg-primary/90 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? 'Enviando...' : 'Enviar Mensagem'}
                 </Button>

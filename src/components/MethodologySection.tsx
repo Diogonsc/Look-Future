@@ -1,9 +1,27 @@
+import { useState } from 'react'
+import { Modal } from './ui/modal'
+
+interface Methodology {
+  id: number
+  title: string
+  description: string
+  icon: string
+  color: string
+  features: string[]
+  fullDescription: string
+  process: string[]
+  benefits: string[]
+}
+
 export function MethodologySection() {
-  const methodologies = [
+  const [selectedMethodology, setSelectedMethodology] = useState<Methodology | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const methodologies: Methodology[] = [
     {
       id: 1,
       title: "UX acima de tudo",
-      description: "Lorem Ipsum is simply dummy text of the printing.",
+      description: "Design centrado no usuário para criar experiências memoráveis e intuitivas.",
       icon: "🎯",
       color: "from-purple-500 to-pink-500",
       features: [
@@ -11,12 +29,28 @@ export function MethodologySection() {
         "Wireframes e protótipos",
         "Testes de usabilidade",
         "Design centrado no usuário"
+      ],
+      fullDescription: "Nossa metodologia UX coloca o usuário no centro de todas as decisões de design. Através de pesquisas profundas, prototipagem iterativa e testes contínuos, criamos experiências que não apenas são bonitas, mas também funcionais e intuitivas. Cada elemento é pensado para facilitar a jornada do usuário e maximizar a conversão.",
+      process: [
+        "Pesquisa e análise de usuários",
+        "Criação de personas e jornadas",
+        "Wireframes e protótipos",
+        "Testes de usabilidade",
+        "Iteração e refinamento",
+        "Implementação e monitoramento"
+      ],
+      benefits: [
+        "Interfaces mais intuitivas e fáceis de usar",
+        "Redução significativa na taxa de abandono",
+        "Maior satisfação e engajamento dos usuários",
+        "Conversões otimizadas e mensuráveis",
+        "Redução de suporte e treinamento"
       ]
     },
     {
       id: 2,
       title: "Ágil e Iterativo",
-      description: "Lorem Ipsum is simply dummy text of the printing.",
+      description: "Desenvolvimento rápido e flexível com entregas contínuas de valor.",
       icon: "⚡",
       color: "from-blue-500 to-cyan-500",
       features: [
@@ -24,12 +58,28 @@ export function MethodologySection() {
         "Feedback contínuo",
         "Melhorias iterativas",
         "Entrega rápida de valor"
+      ],
+      fullDescription: "Adotamos metodologias ágeis para garantir que seu projeto seja entregue rapidamente e com qualidade. Trabalhamos em sprints curtos, com feedback contínuo e melhorias iterativas, permitindo que você veja resultados desde o início e possa ajustar a direção conforme necessário.",
+      process: [
+        "Planejamento e definição de sprints",
+        "Desenvolvimento incremental",
+        "Revisões e feedback semanais",
+        "Testes contínuos",
+        "Deploy e monitoramento",
+        "Retrospectivas e melhorias"
+      ],
+      benefits: [
+        "Entrega mais rápida de funcionalidades",
+        "Maior flexibilidade para mudanças",
+        "Redução de riscos e incertezas",
+        "Melhor comunicação e transparência",
+        "Valor entregue desde o primeiro sprint"
       ]
     },
     {
       id: 3,
       title: "Foco na Conversão",
-      description: "Lorem Ipsum is simply dummy text of the printing.",
+      description: "Otimização contínua para maximizar resultados e ROI.",
       icon: "📈",
       color: "from-green-500 to-emerald-500",
       features: [
@@ -37,6 +87,22 @@ export function MethodologySection() {
         "A/B testing",
         "Análise de dados",
         "Resultados mensuráveis"
+      ],
+      fullDescription: "Nossa metodologia de conversão é baseada em dados e testes contínuos. Analisamos cada etapa da jornada do usuário, identificamos pontos de fricção e implementamos melhorias baseadas em evidências. O resultado é um aumento consistente na conversão e no retorno sobre investimento.",
+      process: [
+        "Análise da jornada atual do usuário",
+        "Identificação de pontos de fricção",
+        "Criação de hipóteses de melhoria",
+        "Implementação de testes A/B",
+        "Análise de resultados",
+        "Implementação das melhorias vencedoras"
+      ],
+      benefits: [
+        "Aumento significativo na taxa de conversão",
+        "ROI mensurável e transparente",
+        "Decisões baseadas em dados reais",
+        "Melhorias contínuas e sustentáveis",
+        "Redução no custo de aquisição"
       ]
     }
   ]
@@ -124,7 +190,13 @@ export function MethodologySection() {
                 </ul>
 
                 {/* Botão "Saiba mais" com efeito 3D */}
-                <button className="inline-flex items-center text-primary font-medium hover:text-primary/80 transition-colors duration-300 group/btn transform group-hover:translate-y-[-2px] hover:scale-105">
+                <button 
+                  onClick={() => {
+                    setSelectedMethodology(methodology)
+                    setIsModalOpen(true)
+                  }}
+                  className="inline-flex items-center text-primary font-medium hover:text-primary/80 transition-colors duration-300 group/btn transform group-hover:translate-y-[-2px] hover:scale-105"
+                >
                   Saiba mais
                   <svg 
                     className="w-4 h-4 ml-2 transform group-hover/btn:translate-x-1 transition-transform duration-300" 
@@ -148,11 +220,83 @@ export function MethodologySection() {
 
         {/* CTA */}
         <div className="text-center mt-16">
-          <button className="px-8 py-4 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl hover:translate-y-[-2px]">
+          <button className="px-8 py-4 bg-primary text-white font-semibold rounded-lg hover:bg-primary/90 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl hover:translate-y-[-2px]">
             Conheça Nosso Processo
           </button>
         </div>
       </div>
+
+      {/* Modal de Metodologia */}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false)
+          setSelectedMethodology(null)
+        }}
+        title={selectedMethodology?.title || ''}
+        icon={selectedMethodology?.icon}
+        color={selectedMethodology?.color}
+      >
+        {selectedMethodology && (
+          <div className="space-y-8">
+            {/* Descrição completa */}
+            <div>
+              <h3 className="text-xl font-semibold text-foreground mb-4">Sobre nossa metodologia</h3>
+              <p className="text-muted-foreground leading-relaxed text-lg">
+                {selectedMethodology.fullDescription}
+              </p>
+            </div>
+
+            {/* Processo */}
+            <div>
+              <h3 className="text-xl font-semibold text-foreground mb-4">Nosso processo</h3>
+              <div className="space-y-4">
+                {selectedMethodology.process.map((step, index) => (
+                  <div key={index} className="flex items-start space-x-4 p-4 bg-muted/30 rounded-lg">
+                    <div className={`w-8 h-8 bg-gradient-to-r ${selectedMethodology.color} rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0`}>
+                      {index + 1}
+                    </div>
+                    <span className="text-muted-foreground">{step}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Features */}
+            <div>
+              <h3 className="text-xl font-semibold text-foreground mb-4">Principais características</h3>
+              <div className="grid md:grid-cols-2 gap-4">
+                {selectedMethodology.features.map((feature, index) => (
+                  <div key={index} className="flex items-start space-x-3 p-4 bg-muted/30 rounded-lg">
+                    <div className={`w-2 h-2 bg-gradient-to-r ${selectedMethodology.color} rounded-full mt-2 flex-shrink-0`}></div>
+                    <span className="text-muted-foreground">{feature}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Benefícios */}
+            <div>
+              <h3 className="text-xl font-semibold text-foreground mb-4">Benefícios desta abordagem</h3>
+              <div className="grid md:grid-cols-2 gap-4">
+                {selectedMethodology.benefits.map((benefit, index) => (
+                  <div key={index} className="flex items-start space-x-3 p-4 bg-primary/5 rounded-lg border border-primary/10">
+                    <div className={`w-2 h-2 bg-gradient-to-r ${selectedMethodology.color} rounded-full mt-2 flex-shrink-0`}></div>
+                    <span className="text-foreground font-medium">{benefit}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* CTA */}
+            <div className="text-center pt-8 border-t border-border/50">
+              <button className="px-8 py-4 bg-primary text-white font-semibold rounded-lg hover:bg-primary/90 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl hover:translate-y-[-2px]">
+                Aplicar esta metodologia no meu projeto
+              </button>
+            </div>
+          </div>
+        )}
+      </Modal>
     </section>
   )
 }

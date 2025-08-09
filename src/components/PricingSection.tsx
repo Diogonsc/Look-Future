@@ -152,7 +152,7 @@ export function PricingSection() {
               <div className="relative z-10">
                 <button className={`w-full py-4 px-6 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 hover:translate-y-[-2px] ${
                   plan.popular
-                    ? 'bg-primary text-primary-foreground hover:bg-primary/90 shadow-xl hover:shadow-2xl'
+                    ? 'bg-primary text-white hover:bg-primary/90 shadow-xl hover:shadow-2xl'
                     : 'bg-gradient-to-r from-primary/10 to-primary/5 text-primary border border-primary/20 hover:bg-primary/20 shadow-lg hover:shadow-xl'
                 }`}
                 style={{

@@ -1,27 +1,20 @@
 import './index.css'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { Header } from './components/Header'
-import { HeroSection } from './components/HeroSection'
-import { ServicesSection } from './components/ServicesSection'
-import { MethodologySection } from './components/MethodologySection'
-import { PricingSection } from './components/PricingSection'
-import { ContactSection } from './components/ContactSection'
-import { Footer } from './components/Footer'
-import BackToTop from './components/BackToTop'
-import WhatsAppButton from './components/WhatsAppButton'
+import { HomePage } from './pages/HomePage'
+import { ProjectsPage } from './pages/ProjectsPage'
 
 function App() {
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      <HeroSection />
-      <ServicesSection />
-      <MethodologySection />
-      <PricingSection />
-      <ContactSection />
-      <BackToTop />
-      <WhatsAppButton />
-      <Footer />
-    </div>
+    <Router>
+      <div className="min-h-screen bg-background">
+        <Header />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/projetos" element={<ProjectsPage />} />
+        </Routes>
+      </div>
+    </Router>
   )
 }
 

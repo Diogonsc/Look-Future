@@ -1,8 +1,9 @@
 import React from "react"
-import { Home, Info, Settings, Mail, User, LogOut } from "lucide-react"
+import { Home, Info, Settings, Mail, FolderOpen } from "lucide-react"
 import { Button } from "./ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet"
 import { cn } from "../lib/utils"
+import { Link } from "react-router-dom"
 
 interface NavigationItem {
   href: string
@@ -16,34 +17,59 @@ interface MobileMenuProps {
 
 export function MobileMenu({ className, navigationItems }: MobileMenuProps) {
   const [isOpen, setIsOpen] = React.useState(false)
-  
-  const userMenuItems = [
-    { href: "/perfil", label: "Meu Perfil", icon: User },
-    { href: "/configuracoes", label: "Configurações", icon: Settings },
-    { href: "/logout", label: "Sair", icon: LogOut },
-  ]
 
   const scrollToSection = (href: string) => {
-    const element = document.querySelector(href)
-    if (element) {
-      const headerHeight = 64 // altura do header em pixels
-      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
-      const offsetPosition = elementPosition - headerHeight
+    if (href.startsWith('/#')) {
+      // Navegar para home e depois scroll
+      const sectionId = href.substring(1)
+      setTimeout(() => {
+        const element = document.querySelector(sectionId)
+        if (element) {
+          const headerHeight = 64
+          const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
+          const offsetPosition = elementPosition - headerHeight
 
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      })
-      
-      // Fecha o menu mobile após clicar
-      setIsOpen(false)
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          })
+        }
+      }, 100)
+    } else if (href.startsWith('#')) {
+      // Scroll na página atual
+      const element = document.querySelector(href)
+      if (element) {
+        const headerHeight = 64
+        const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
+        const offsetPosition = elementPosition - headerHeight
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        })
+      }
+    }
+    
+    // Fecha o menu mobile após clicar
+    setIsOpen(false)
+  }
+
+  const handleNavigation = (href: string) => {
+    if (href === '/' || href === '/projetos') {
+      // Navegação entre páginas
+      return
+    } else {
+      // Scroll para seção
+      scrollToSection(href)
     }
   }
 
   const getIconForSection = (href: string) => {
     switch (href) {
-      case '#inicio':
+      case '/':
         return Home
+      case '/projetos':
+        return FolderOpen
       case '#servicos':
         return Settings
       case '#metodologia':
@@ -82,18 +108,16 @@ export function MobileMenu({ className, navigationItems }: MobileMenuProps) {
         <div className="flex flex-col h-full">
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b">
-            <button 
-              onClick={() => {
-                scrollToSection('#inicio')
-                setIsOpen(false)
-              }}
+            <Link 
+              to="/"
+              onClick={() => setIsOpen(false)}
               className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
             >
               <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
                 <span className="text-primary-foreground font-bold text-sm">LF</span>
               </div>
               <span className="font-bold text-lg">Look Future</span>
-            </button>
+            </Link>
           </div>
 
           {/* Navigation */}
@@ -105,48 +129,39 @@ export function MobileMenu({ className, navigationItems }: MobileMenuProps) {
               <nav className="space-y-2">
                 {navigationItems.map((item) => {
                   const Icon = getIconForSection(item.href)
-                  return (
-                    <button
-                      key={item.href}
-                      onClick={() => scrollToSection(item.href)}
-                      className="flex items-center space-x-3 px-3 py-2 rounded-md text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-accent w-full text-left"
-                    >
-                      <Icon className="h-4 w-4" />
-                      <span>{item.label}</span>
-                    </button>
-                  )
-                })}
-              </nav>
-            </div>
-
-            {/* User Menu */}
-            <div className="border-t">
-              <div className="p-6">
-                <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">
-                  Conta
-                </h3>
-                <nav className="space-y-2">
-                  {userMenuItems.map((item) => {
-                    const Icon = item.icon
+                  
+                  if (item.href === '/' || item.href === '/projetos') {
                     return (
-                      <a
+                      <Link
                         key={item.href}
-                        href={item.href}
-                        className="flex items-center space-x-3 px-3 py-2 rounded-md text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-accent"
+                        to={item.href}
+                        onClick={() => setIsOpen(false)}
+                        className="flex items-center space-x-3 px-3 py-2 rounded-md text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-accent w-full text-left"
                       >
                         <Icon className="h-4 w-4" />
                         <span>{item.label}</span>
-                      </a>
+                      </Link>
                     )
-                  })}
-                </nav>
-              </div>
+                  } else {
+                    return (
+                      <button
+                        key={item.href}
+                        onClick={() => handleNavigation(item.href)}
+                        className="flex items-center space-x-3 px-3 py-2 rounded-md text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-accent w-full text-left"
+                      >
+                        <Icon className="h-4 w-4" />
+                        <span>{item.label}</span>
+                      </button>
+                    )
+                  }
+                })}
+              </nav>
             </div>
           </div>
 
           {/* Footer */}
           <div className="border-t p-6">
-            <Button className="w-full mb-3">
+            <Button className="w-full mb-3 text-white">
               Entrar
             </Button>
             <p className="text-xs text-muted-foreground text-center">
